@@ -13,62 +13,43 @@ correlation = df['SessionLengthMin'].corr(df['SatisfactionRating'])
 print(f"Correlation between SessionLengthMin and SatisfactionRating: {correlation:.2f}")
 
 # Analyze means by TaskType and StudentLevel
-mean_by_task = df.groupby('TaskType').mean(numeric_only=True)[['SessionLengthMin', 'SatisfactionRating']]
+mean_by_task = df.groupby('TaskType').mean(numeric_only=True)[['SatisfactionRating', 'TotalPrompts']]
 mean_by_student_level = df.groupby('StudentLevel').mean(numeric_only=True)[['SessionLengthMin', 'SatisfactionRating']]
-print("\nMean SessionLengthMin and SatisfactionRating by TaskType:")
+print("\nMean SatisfactionRating and TotalPrompts by TaskType:")
 print(mean_by_task)
 print("\nMean SessionLengthMin and SatisfactionRating by StudentLevel:")
 print(mean_by_student_level)
 
-# Scatter plot: SessionLengthMin vs. SatisfactionRating, colored by TaskType, sized by StudentLevel
-plt.figure(figsize=(10, 6))
-sns.scatterplot(data=df, x='SessionLengthMin', y='SatisfactionRating', hue='TaskType', size='StudentLevel', sizes=(50, 200))
-plt.title('Session Length vs. Satisfaction Rating by Task Type and Student Level')
-plt.xlabel('Session Length (Minutes)')
-plt.ylabel('Satisfaction Rating')
-plt.savefig('scatter_plot.png')
+# Pie chart: Distribution of students by StudentLevel
+plt.figure(figsize=(8, 6))
+student_level_counts = df['StudentLevel'].value_counts()
+plt.pie(student_level_counts, labels=student_level_counts.index, 
+        autopct='%1.1f%%', 
+        colors=["#3498db", "#e74c3c", "#2ecc71"], 
+        startangle=90, textprops={'fontsize': 11})
+plt.title('Distribution of Students by Level')
+plt.tight_layout()
+plt.savefig('student_level_pie.png')
 plt.show()
 
 # Bar chart: Mean SatisfactionRating by TaskType
 plt.figure(figsize=(10, 6))
-sns.barplot(data=df, x='TaskType', y='SatisfactionRating', errorbar=None)
+sns.barplot(data=df, x='TaskType', y='SatisfactionRating', errorbar=None, color='#3498db')
 plt.title('Mean Satisfaction Rating by Task Type')
 plt.xlabel('Task Type')
 plt.ylabel('Mean Satisfaction Rating')
-plt.savefig('bar_chart.png')
+plt.xticks(rotation=45, ha='right')
+plt.tight_layout()
+plt.savefig('satisfaction_by_tasktype.png')
 plt.show()
-
 
 # Bar chart: Mean Total Prompts by TaskType
 plt.figure(figsize=(10, 6))
-sns.barplot(data=df, x='TaskType', y='TotalPrompts', errorbar=None)
-plt.title('Mean Prompts by Task Type')
-plt.xlabel('Total Prompts')
-plt.ylabel('Mean Satisfaction Rating')
-plt.savefig('bar_chart.png')
-plt.show()
-
-# Box plot: SessionLengthMin by StudentLevel
-plt.figure(figsize=(10, 6))
-sns.boxplot(data=df, x='StudentLevel', y='SessionLengthMin', order=['High School', 'Undergraduate', 'Graduate'])
-plt.title('Session Length Distribution by Student Level')
-plt.xlabel('Student Level')
-plt.ylabel('Session Length (Minutes)')
-plt.savefig('box_plot.png')
-plt.show()
-
-"""# Option 3: Histogram with overlapping distributions
-plt.figure(figsize=(12, 6))
-for level, color in zip(['High School', 'Undergraduate', 'Graduate'], 
-                        ['#3498db', '#e74c3c', '#2ecc71']):
-    data = df[df['StudentLevel'] == level]['SessionLengthMin']
-    plt.hist(data, bins=20, alpha=1.6, label=level, color=color, edgecolor='black')
-
-plt.title('Session Length Distribution Comparison', fontsize=14, fontweight='bold')
-plt.xlabel('Session Length (Minutes)', fontsize=12)
-plt.ylabel('Number of Sessions', fontsize=12)
-plt.legend()
-plt.grid(axis='y', alpha=0.3)
+sns.barplot(data=df, x='TaskType', y='TotalPrompts', errorbar=None, color='#e74c3c')
+plt.title('Mean Total Prompts by Task Type')
+plt.xlabel('Task Type')
+plt.ylabel('Mean Total Prompts')
+plt.xticks(rotation=45, ha='right')
 plt.tight_layout()
-plt.savefig('histogram_comparison.png')
-plt.show()"""
+plt.savefig('prompts_by_tasktype.png')
+plt.show()
