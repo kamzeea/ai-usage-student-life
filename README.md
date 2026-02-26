@@ -119,7 +119,7 @@ Used:
 
 - Tested relationship between **session length** and **satisfaction**  
 - Result: **Correlation ≈ -0.01**  
-- ➡ Indicates no meaningful linear relationship between session duration and satisfaction.  
+- Indicates no meaningful linear relationship between session duration and satisfaction.  
 
 **ANOVA Testing**
 
